@@ -1,0 +1,650 @@
+/* Temel ve mobil uyumlu stil */
+/* Arka kamera görüntüsü için optimizasyonlar içerir */
+:root {
+  --bg: #151e2b;
+  --panel: #1b2636;
+  --muted: #232f43;
+  --accent: #2e8bfa;
+  --danger: #dc3545;
+  --text: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  padding-bottom: env(safe-area-inset-bottom); /* iPhone X+ safe area */
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: var(--bg);
+  color: #f3f6fa;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.main-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  background: var(--panel);
+  border-radius: 18px;
+  box-shadow: 0 4px 32px #000a;
+  padding: 32px 32px 40px 32px;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.install-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(46, 139, 250, 0.3);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.install-btn:hover {
+  transform: translateY(-2px);
+  background: #1c5fa8;
+}
+
+.install-btn.hidden {
+  display: none;
+}
+
+.subtitle {
+  color: #b0b8c9;
+  margin-bottom: 28px;
+  font-size: 1.1rem;
+}
+
+.content {
+  display: flex;
+  gap: 32px;
+}
+
+.left-panel {
+  background: var(--muted);
+  border-radius: 14px;
+  padding: 28px 24px 24px 24px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 280px;
+}
+
+.panel-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 14px;
+  color: #fff;
+}
+
+/* Arka kamera görüntüsü için video elementi */
+.camera-view {
+  width: 100%;
+  height: 240px;
+  background: #000;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 18px;
+  transform: scaleX(1); /* Arka kamera için normal yönlendirme */
+}
+
+.qr-img {
+  width: 240px;
+  height: 180px;
+  background: #1b2636;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  object-fit: cover;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.button-row button {
+  padding: 8px 18px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.1s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+  min-width: 44px;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+  z-index: 10;
+}
+
+.button-row button:hover {
+  background: #1c5fa8;
+}
+
+.button-row button:active {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+#stopCamera {
+  background: var(--danger);
+}
+
+#stopCamera:hover {
+  background: #a02835;
+}
+
+.instruction-text {
+  font-size: 0.9rem;
+  color: #8a95ad;
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.manual-section {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.manual-title {
+  font-size: 0.98rem;
+  color: #b0b8c9;
+  margin-bottom: 4px;
+}
+
+#modelId {
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 5px;
+  border: 1px solid #2e3a4d;
+  background: #1b2636;
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.desc-section {
+  width: 100%;
+  background: #18212e;
+  border-radius: 7px;
+  padding: 10px 12px;
+}
+
+.desc-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.desc-text {
+  font-size: 0.97rem;
+  color: #b0b8c9;
+}
+
+.right-panel {
+  flex: 1;
+  background: var(--muted);
+  border-radius: 14px;
+  padding: 24px 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 320px;
+}
+
+.model-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 14px;
+}
+
+.model-area {
+  width: 100%;
+  height: 340px;
+  background: #1b2636;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.model-img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px #0005;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* AR Görünümü Stilleri */
+.ar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: #000;
+}
+
+.ar-container a-scene {
+  width: 100%;
+  height: 100%;
+}
+
+/* AR Kontrol Paneli */
+.ar-control-panel {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: rgba(27, 38, 54, 0.9);
+  padding: 12px 20px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+}
+
+.control-btn {
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.control-btn:hover {
+  background: #1c5fa8;
+  transform: translateY(-2px);
+}
+
+.control-btn:active {
+  transform: translateY(0);
+}
+
+#exitAR {
+  background: var(--danger);
+}
+
+#exitAR:hover {
+  background: #a02835;
+}
+
+.zoom-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.zoom-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Marker Bilgisi */
+.marker-info {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(27, 38, 54, 0.9);
+  padding: 12px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  z-index: 1001;
+}
+
+.marker-info p {
+  margin: 0 0 8px 0;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.marker-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--accent);
+  transition: color 0.2s;
+}
+
+.marker-link:hover {
+  color: #1c5fa8;
+}
+
+/* Model Yükleme Butonu */
+.load-btn {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 8px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.load-btn:hover {
+  background: #1c5fa8;
+}
+
+/* AR Başlat Butonu */
+.ar-controls {
+  margin-top: 16px;
+  width: 100%;
+}
+
+.ar-btn {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), #1c5fa8);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(46, 139, 250, 0.3);
+}
+
+.ar-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 139, 250, 0.4);
+}
+
+.ar-btn:active {
+  transform: translateY(0);
+}
+
+/* Model Preview için model-viewer */
+#modelPreview model-viewer {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  background: #1b2636;
+}
+
+/* Responsive AR kontrolleri */
+@media (max-width: 420px) {
+  .ar-control-panel {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 15px;
+    bottom: 10px;
+  }
+
+  .control-btn {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  .zoom-controls {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 8px;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .marker-info {
+    top: 10px;
+    padding: 10px 15px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive adjustments for small phones */
+@media (max-width: 420px) {
+  .main-container {
+    padding: 12px;
+    margin: 0;
+  }
+  
+  h1 {
+    font-size: 1.2rem;
+  }
+  
+  .subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .content {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .left-panel,
+  .right-panel {
+    width: 100%;
+    min-width: auto;
+    padding: 12px;
+  }
+  
+  .camera-view,
+  .qr-img {
+    height: 200px;
+    width: 100%;
+  }
+  
+  .model-area {
+    height: 240px;
+  }
+  
+  .button-row button {
+    font-size: 15px;
+    padding: 10px;
+  }
+}
+
+/* Landscape phone */
+@media (orientation: landscape) and (max-height: 420px) {
+  .camera-view,
+  .qr-img {
+    height: calc(100vh - 120px);
+  }
+}
+
+/* Car Controls Styling */
+.car-controls {
+  position: absolute;
+  bottom: 120px; /* Above control panel */
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-end;
+  z-index: 1002;
+}
+
+.drive-pad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: rgba(27, 38, 54, 0.8);
+  padding: 15px;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+}
+
+.pad-row {
+  display: flex;
+  gap: 8px;
+}
+
+.drive-btn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.drive-btn:active {
+  background: rgba(46, 139, 250, 0.8);
+  transform: scale(0.95);
+}
+
+.drift-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(27, 38, 54, 0.8);
+  padding: 8px 15px;
+  border-radius: 30px;
+  backdrop-filter: blur(5px);
+}
+
+.label-text {
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* Toggle Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #dc3545; /* Red for drift mode */
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #dc3545;
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+@media (max-width: 480px) {
+  .car-controls {
+    bottom: 90px;
+    right: 10px;
+    transform: scale(0.9);
+    transform-origin: bottom right;
+  }
+}

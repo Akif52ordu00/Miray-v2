@@ -1,0 +1,25 @@
+{
+  "name": "Miray - AR Tesisat Görselleştirme",
+  "short_name": "Miray",
+  "start_url": "./agaa.html",
+  "display": "standalone",
+  "background_color": "#151e2b",
+  "theme_color": "#1b2636",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "permissions": [
+    "camera"
+  ],
+  "description": "Elektrik ve boru tesisatlarının 3D AR görselleştirilmesi - QR kod ile marker tabanlı AR deneyimi"
+}

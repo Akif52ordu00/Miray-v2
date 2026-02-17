@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Miray - AR Tesisat Görselleştirme</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="description" content="Elektrik ve boru tesisatlarının 3D AR görselleştirilmesi">
+  <link rel="stylesheet" href="fg.css">
+  <script>
+    // Service Worker kaydı
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(reg => {
+        console.log('SW kayıt başarılı:', reg.scope);
+      }).catch(err => {
+        console.log('SW kayıt hatası:', err);
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <!-- Ana Görünüm -->
+  <div id="mainView" class="main-container">
+    <div class="header-row">
+      <h1>Miray AR</h1>
+      <button id="installApp" class="install-btn hidden">📲 Uygulamayı Yükle</button>
+    </div>
+    <p class="subtitle">QR okut → AR deneyimi başlat</p>
+    <div class="content">
+      <div class="left-panel">
+        <div class="panel-title">Kamera</div>
+        <video id="cameraFeed" class="camera-view hidden" playsinline autoplay muted>
+        </video>
+        <img class="qr-img" src="QR tarama.png" alt="QR Kod">
+        <div class="button-row">
+          <button id="startCamera">Kamerayı Başlat</button>
+          <button id="stopCamera" class="hidden">Durdur</button>
+        </div>
+        <p class="instruction-text">QR kod okutarak AR deneyimini başlatın</p>
+        <div class="manual-section">
+          <div class="manual-title">Manuel Yükle</div>
+          <input type="text" id="modelId" placeholder="modelId (örnek: house-001)">
+          <button id="loadModel" class="load-btn">Model Yükle</button>
+        </div>
+        <div class="desc-section">
+          <div class="desc-title">Evin Elektrik Tesisatı</div>
+          <div class="desc-text" id="modelDescription">QR kod okutun veya model ID girin</div>
+        </div>
+      </div>
+      <div class="right-panel">
+        <div class="model-title">3D Model Önizleme</div>
+        <div class="model-area" id="modelPreview">
+          <model-viewer id="previewModel" src="" alt="3D Model" camera-controls auto-rotate ar
+            style="width: 100%; height: 100%;" loading="lazy">
+          </model-viewer>
+        </div>
+        <div class="ar-controls">
+          <button id="startAR" class="ar-btn">AR Modunu Başlat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AR Görünümü -->
+  <div id="arView" class="ar-container hidden">
+    <a-scene id="arScene" embedded
+      arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; sourceWidth: 1280; sourceHeight: 960; displayWidth: 1280; displayHeight: 960;"
+      vr-mode-ui="enabled: false" renderer="logarithmicDepthBuffer: true; colorManagement: true; sortObjects: true">
+
+      <!-- Marker Pattern (Hiro marker) -->
+      <a-marker id="marker" type="pattern" preset="hiro" raycaster="objects: .clickable" smooth="true" smoothCount="10"
+        smoothTolerance="0.01" smoothThreshold="2">
+        <a-entity id="modelEntity" gltf-model="" scale="1 1 1" position="0 0 0" rotation="0 0 0"
+          animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+        </a-entity>
+
+        <!-- Navigasyon kontrolleri (Stellarium benzeri) -->
+        <a-entity id="navControls" position="0 0.5 0">
+          <a-ring id="navRing" radius-inner="0.3" radius-outer="0.4" color="#2e8bfa" opacity="0.6" rotation="90 0 0">
+          </a-ring>
+          <a-sphere id="navCenter" radius="0.05" color="#ffffff" position="0 0.3 0">
+          </a-sphere>
+        </a-entity>
+      </a-marker>
+
+      <!-- Kamera -->
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <!-- AR Kontrol Paneli -->
+    <div class="ar-control-panel">
+      <button id="exitAR" class="control-btn">Çıkış</button>
+      <button id="resetView" class="control-btn">Sıfırla</button>
+      <button id="toggleNav" class="control-btn">Navigasyon</button>
+      <div class="zoom-controls">
+        <button id="zoomIn" class="zoom-btn">+</button>
+        <button id="zoomOut" class="zoom-btn">-</button>
+      </div>
+    </div>
+
+    <!-- Marker Bilgisi -->
+    <div class="marker-info">
+      <p>Marker'ı kameraya gösterin</p>
+      <a href="https://jeromeetienne.github.io/AR.js/data/images/HIRO.jpg" target="_blank" class="marker-link">Hiro
+        Marker İndir</a>
+    </div>
+  </div>
+
+  <!-- VR Görünümü (PC/Masaüstü için) -->
+  <div id="vrView" class="ar-container hidden">
+    <a-scene id="vrScene" embedded renderer="logarithmicDepthBuffer: true; colorManagement: true; sortObjects: true">
+      <!-- Sky / Arkaplan -->
+      <a-sky color="#ECECEC"></a-sky>
+
+      <!-- Işıklandırma -->
+      <a-light type="ambient" color="#BBB"></a-light>
+      <a-light type="directional" color="#FFF" intensity="0.6" position="-0.5 1 1"></a-light>
+
+      <!-- Grid / Zemin (Opsiyonel) -->
+      <a-grid id="ground" static-body
+        material="src: https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/assets/grid.png; repeat: 100 100"
+        rotation="-90 0 0" scale="100 100 100"></a-grid>
+
+      <!-- Model Entity -->
+      <a-entity id="vrModelEntity" position="0 0 -3" scale="1 1 1"></a-entity>
+
+      <!-- Kamera ve Kontroller -->
+      <a-entity id="vrRig" position="0 1.6 0">
+        <a-entity camera look-controls wasd-controls="acceleration: 15" position="0 0 0"></a-entity>
+      </a-entity>
+    </a-scene>
+
+    <!-- VR Kontrol Paneli -->
+    <div class="ar-control-panel">
+      <button id="exitVR" class="control-btn">Çıkış</button>
+      <div class="vr-instructions">
+        W, A, S, D ile yürü | Mouse ile bak
+      </div>
+    </div>
+  </div>
+  <!-- Car Controls -->
+  <div id="carControls" class="car-controls hidden">
+    <div class="drift-toggle">
+      <label class="switch">
+        <input type="checkbox" id="driftModeBtn">
+        <span class="slider round"></span>
+      </label>
+      <span class="label-text">DRIFT MODE</span>
+    </div>
+
+    <div class="drive-pad">
+      <div class="pad-row">
+        <button id="btnUp" class="drive-btn">▲</button>
+      </div>
+      <div class="pad-row">
+        <button id="btnLeft" class="drive-btn">◄</button>
+        <button id="btnDown" class="drive-btn">▼</button>
+        <button id="btnRight" class="drive-btn">►</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer@latest/dist/model-viewer.min.js"></script>
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.js"></script>
+  <script src="ghf.js"></script>
+</body>
+
+</html>
